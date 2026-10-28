@@ -50,7 +50,7 @@ export default function FeaturedWork() {
   return (
     <section id="projects" className="featured-section" ref={containerRef}>
       <div className="container featured-header">
-        <span className="section-badge">// SELECTED WORK</span>
+        <span className="section-badge">Featured Engineering Work</span>
         <h2>
           <LiquidMetalText
             key={`featured-${isDark ? 'dark' : 'light'}`}

@@ -41,36 +41,36 @@ export default function Footer() {
             <p className="footer-subtag">{profileData.footerHeadline.subtag}</p>
             <div className="footer-status-badge">
               <span className="footer-status-dot" />
-              <span>AVAILABLE FOR HIRE & FREELANCE</span>
+              <span>Available for Full-Time & Engineering Roles</span>
             </div>
           </div>
 
           {/* Column 2: Navigation */}
           <div className="footer-col-mid">
-            <span className="footer-col-label">/QUICK NAVIGATION</span>
+            <span className="footer-col-label">Navigation</span>
             <div className="footer-nav-list">
               <a href="#hero" className="footer-nav-item" onClick={(e) => scrollToSection(e, 'hero')}>
-                <span className="item-num">01 //</span>
+                <span className="item-num">01</span>
                 <span>Home</span>
               </a>
               <a href="#skills" className="footer-nav-item" onClick={(e) => scrollToSection(e, 'skills')}>
-                <span className="item-num">02 //</span>
+                <span className="item-num">02</span>
                 <span>Stack & Architecture</span>
               </a>
               <a href="#experience-education" className="footer-nav-item" onClick={(e) => scrollToSection(e, 'experience-education')}>
-                <span className="item-num">03 //</span>
+                <span className="item-num">03</span>
                 <span>Experience & Education</span>
               </a>
               <a href="#projects" className="footer-nav-item" onClick={(e) => scrollToSection(e, 'projects')}>
-                <span className="item-num">04 //</span>
+                <span className="item-num">04</span>
                 <span>Selected Works</span>
               </a>
               <a href="#contact" className="footer-nav-item" onClick={(e) => scrollToSection(e, 'contact')}>
-                <span className="item-num">05 //</span>
+                <span className="item-num">05</span>
                 <span>Contact & Inquiries</span>
               </a>
               <a href={profileData.socials.leetcode} className="footer-nav-item" target="_blank" rel="noopener noreferrer">
-                <span className="item-num">06 //</span>
+                <span className="item-num">06</span>
                 <span>LeetCode 200+ Solutions</span>
               </a>
             </div>
@@ -78,7 +78,7 @@ export default function Footer() {
 
           {/* Column 3: Direct Reach, WhatsApp, LinkedIn, GitHub */}
           <div className="footer-col-right">
-            <span className="footer-col-label">/DIRECT REACH & HIRE</span>
+            <span className="footer-col-label">Contact Channels</span>
 
             <a href={profileData.socials.email} className="footer-email-bold" title="Send Email">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">

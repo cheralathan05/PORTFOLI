@@ -77,9 +77,10 @@ export default function Hero() {
         <h4>Postgres & Redis</h4>
         <p>// Systems & Data</p>
       </div>
-      <div style={{ textAlign: 'center', marginBottom: '16px', zIndex: 2, position: 'relative' }}>
-        <span className="section-badge" style={{ fontSize: '13px', letterSpacing: '2px', fontWeight: 600 }}>
-          // CHERALATHAN B.N
+      <div style={{ textAlign: 'center', marginBottom: '20px', zIndex: 2, position: 'relative' }}>
+        <span className="section-badge" style={{ padding: '6px 14px', fontSize: '11px', letterSpacing: '0.08em' }}>
+          <span className="status-dot-active" />
+          CHERALATHAN B.N · SYSTEMS & AI ARCHITECT
         </span>
       </div>
       <h1>
@@ -87,11 +88,14 @@ export default function Hero() {
         <span className="italic mo-liquid-sheen">{profileData.roleHighlight}</span>
       </h1>
       <div className="hero-meta">
-        <span>// {profileData.location}</span>
-        <VariablePhysicsText color="var(--muted)" minWeight={300} maxWeight={800} continuousWave={true}>
+        <span>{profileData.location}</span>
+        <VariablePhysicsText color="var(--muted)" minWeight={300} maxWeight={700} continuousWave={true}>
           SCROLL TO EXPLORE [↓]
         </VariablePhysicsText>
-        <span>STATUS: {profileData.status}</span>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+          <span className="status-dot-active" />
+          {profileData.status}
+        </span>
       </div>
     </section>
   );

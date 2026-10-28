@@ -60,7 +60,7 @@ export default function CustomCursor() {
       const darkActive = document.documentElement.getAttribute('data-theme') === 'dark';
       const coreColor = darkActive ? 'rgba(242,240,235,0.9)' : 'rgba(255,255,255,0.9)';
       const innerColor = darkActive ? 'rgba(10,10,11,1)' : 'rgba(14,14,15,1)';
-      const strokeColor = 'rgba(255, 74, 28, 0.4)';
+      const strokeColor = darkActive ? 'rgba(255, 255, 255, 0.35)' : 'rgba(0, 0, 0, 0.35)';
 
       // Core
       cctx.fillStyle = coreColor;

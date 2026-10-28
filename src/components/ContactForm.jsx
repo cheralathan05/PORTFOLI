@@ -145,23 +145,26 @@ export default function ContactForm() {
             <p>{profileData.contactPitch.subheading}</p>
 
             {/* Direct Contact Overview */}
-            <div style={{ marginBottom: '24px', padding: '16px', borderRadius: '12px', background: 'var(--tech-bg)', border: '1px solid var(--line)' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', fontFamily: "'JetBrains Mono', monospace" }}>
-                <div>
-                  <span style={{ color: 'var(--bh-red)' }}>// PHONE: </span>
-                  <a href={`tel:${profileData.phone}`} style={{ color: 'var(--fg)', textDecoration: 'none' }}>+91 {profileData.phone}</a>
+            <div style={{ marginBottom: '24px', padding: '18px 20px', borderRadius: '14px', background: 'var(--bg-card)', border: '1px solid var(--line)', backdropFilter: 'blur(12px)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', fontFamily: "'JetBrains Mono', monospace" }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)', fontWeight: 500 }}>PHONE</span>
+                  <a href={`tel:${profileData.phone}`} style={{ color: 'var(--fg)', textDecoration: 'none', fontWeight: 500 }}>+91 {profileData.phone}</a>
                 </div>
-                <div>
-                  <span style={{ color: 'var(--bh-red)' }}>// EMAIL: </span>
-                  <a href={profileData.socials.email} style={{ color: 'var(--fg)', textDecoration: 'none' }}>{profileData.email}</a>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)', fontWeight: 500 }}>EMAIL</span>
+                  <a href={profileData.socials.email} style={{ color: 'var(--fg)', textDecoration: 'none', fontWeight: 500 }}>{profileData.email}</a>
                 </div>
-                <div>
-                  <span style={{ color: 'var(--bh-red)' }}>// LOCATION: </span>
-                  <span style={{ color: 'var(--fg)' }}>{profileData.location}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)', fontWeight: 500 }}>LOCATION</span>
+                  <span style={{ color: 'var(--fg)', fontWeight: 500 }}>{profileData.location}</span>
                 </div>
-                <div>
-                  <span style={{ color: 'var(--bh-red)' }}>// CAREER TARGET: </span>
-                  <span style={{ color: 'var(--muted)', fontSize: '12px' }}>{profileData.careerObjective}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)', fontWeight: 500 }}>STATUS</span>
+                  <span style={{ color: 'var(--fg)', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="status-dot-active" />
+                    Available for Q1/Q2 Roles
+                  </span>
                 </div>
               </div>
             </div>
@@ -174,7 +177,7 @@ export default function ContactForm() {
 
             {/* Responsive Social Icons */}
             <div className="form-socials">
-              <span className="form-socials-title">// SOCIALS & REACH</span>
+              <span className="form-socials-title">DIRECT CHANNELS & PROFILES</span>
               <div className="form-socials-list">
                 <a
                   href={profileData.socials.whatsapp}
@@ -258,39 +261,39 @@ export default function ContactForm() {
               </p>
 
               <div className="form-group">
-                <label>Name</label>
+                <label>Full Name</label>
                 <input
                   className="input"
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Enter Name.."
+                  placeholder="Your name or company..."
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label>Email</label>
+                <label>Email Address</label>
                 <input
                   className="input"
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Enter E-mail.."
+                  placeholder="name@company.com"
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label>Message</label>
+                <label>Message & Scope</label>
                 <textarea
                   className="input"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  placeholder="Tell Me...."
+                  placeholder="Tell me about your project, timeline, or engineering role..."
                   rows="4"
                   required
                 />
@@ -301,19 +304,22 @@ export default function ContactForm() {
                 className="submit-btn"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Transmitting...' : 'Launch Message'}
+                {isSubmitting ? 'Transmitting Message...' : 'Send Message →'}
               </button>
 
               {submitStatus === 'success' && (
                 <p
                   style={{
-                    color: 'var(--bh-red)',
+                    color: '#10b981',
                     fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: '12px',
-                    marginTop: '12px'
+                    fontSize: '12.5px',
+                    marginTop: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}
                 >
-                  ✓ Transmission received! I'll reply promptly.
+                  ✓ Transmission dispatched successfully! I will reply promptly.
                 </p>
               )}
             </form>

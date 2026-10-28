@@ -302,18 +302,19 @@ export default function WorkCanvas() {
         </div>
 
         <div className="cv-overlay container">
+          <span className="section-badge">Interactive Canvas</span>
           <h2>
             <LiquidMetalText
               key={`cv-${isDark ? 'dark' : 'light'}`}
               colors={isDark ? LIQUID_METAL_PALETTE.dark : LIQUID_METAL_PALETTE.light}
               speed={6}
             >
-              Explore the work
+              Explore the Work
             </LiquidMetalText>
           </h2>
-          <p>Drag in any direction. Every tile is real: the projects, the numbers from their code, and the stack behind them.</p>
-          <a className="cv-play" href={profileData.socials.leetcode} target="_blank" rel="noopener noreferrer">
-            Explore LeetCode 200+ Solutions
+          <p>Drag in any direction. Every tile links directly to an authentic codebase, demo recording, or verified metric.</p>
+          <a className="cv-play project-link-btn" href={profileData.socials.leetcode} target="_blank" rel="noopener noreferrer">
+            Explore LeetCode 200+ Solutions ↗
           </a>
         </div>
         <div className="cv-hud" aria-hidden="true">

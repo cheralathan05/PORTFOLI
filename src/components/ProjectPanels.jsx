@@ -26,10 +26,10 @@ export default function ProjectPanels() {
       <div className="container">
         <div className="panels-head">
           <div>
-            <span className="section-badge">// MORE WORK</span>
+            <span className="section-badge">Additional Implementations</span>
             <h2>More Projects</h2>
           </div>
-          <p>Opens the next one every 5 s. Hover or tap to pick.</p>
+          <p style={{ color: 'var(--muted)', fontSize: '13px' }}>Hover or select any project to preview live interface demo.</p>
         </div>
 
         <div className={`panels${inView ? ' is-running' : ''}`} style={{ '--advance': `${ADVANCE_MS}ms` }}>
