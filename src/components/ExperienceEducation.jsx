@@ -37,8 +37,8 @@ export default function ExperienceEducation() {
     <section id="experience-education" ref={containerRef} style={{ padding: '120px 0', borderTop: '1px solid var(--line)' }}>
       <div className="container">
         {/* Section Header */}
-        <div style={{ marginBottom: '50px' }}>
-          <span className="section-badge">// PROFESSIONAL BACKGROUND & TELEMETRY</span>
+        <div style={{ marginBottom: '56px' }}>
+          <span className="section-badge">Background & Track Record</span>
           <h2>
             <LiquidMetalText
               key={`ee-${isDark ? 'dark' : 'light'}`}
@@ -48,29 +48,31 @@ export default function ExperienceEducation() {
               Experience & Education
             </LiquidMetalText>
           </h2>
-          <p style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--muted)', fontSize: '13px', marginTop: '10px' }}>
-            // Track record in AI systems, full-stack engineering, and algorithmic problem-solving
+          <p style={{ color: 'var(--muted)', fontSize: '14px', marginTop: '10px', maxWidth: '640px', lineHeight: '1.6' }}>
+            Professional journey across generative AI pipelines, distributed full-stack architectures, and algorithmic problem-solving.
           </p>
         </div>
 
         {/* 1. Work Experience Grid */}
-        <div style={{ marginBottom: '60px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-            <span className="section-badge" style={{ marginBottom: 0 }}>// WORK EXPERIENCE</span>
+        <div style={{ marginBottom: '64px' }}>
+          <div style={{ marginBottom: '24px' }}>
+            <span className="section-badge">Work Experience</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             {/* Job 1 */}
-            <div className="ee-card meta-card" style={{ padding: '28px', borderLeft: '3px solid var(--bh-red)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-                <h5 style={{ margin: 0 }}>June 2025 · 1 Month</h5>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: 'var(--muted)' }}>INTERNSHIP</span>
+            <div className="ee-card" style={{ padding: '32px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>June 2025 · 1 Month</span>
+                <span className="ee-role-badge">INTERNSHIP</span>
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: 'var(--fg)', margin: '6px 0 2px' }}>Generative AI Intern</h3>
-              <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '14px', color: 'var(--bh-red)', fontWeight: 600, marginBottom: '14px' }}>
-                One Yes Technology Pvt. Ltd.
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 2px', letterSpacing: '-0.02em' }}>
+                Generative AI Intern
+              </h3>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 500, marginBottom: '16px' }}>
+                One Yes Technology Pvt. Ltd. · Chennai
               </p>
-              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.6', marginBottom: '18px' }}>
+              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '22px' }}>
                 Engineered generative AI workflows, prompt optimization routines, and semantic vector embedding pipelines with Redis caching and REST API integrations.
               </p>
               <div className="project-tags" style={{ marginBottom: 0 }}>
@@ -81,16 +83,18 @@ export default function ExperienceEducation() {
             </div>
 
             {/* Job 2 */}
-            <div className="ee-card meta-card" style={{ padding: '28px', borderLeft: '3px solid #6366f1' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-                <h5 style={{ margin: 0 }}>July 2024 · 1 Month</h5>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: 'var(--muted)' }}>INTERNSHIP</span>
+            <div className="ee-card" style={{ padding: '32px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>July 2024 · 1 Month</span>
+                <span className="ee-role-badge">INTERNSHIP</span>
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: 'var(--fg)', margin: '6px 0 2px' }}>Cybersecurity Intern</h3>
-              <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '14px', color: '#6366f1', fontWeight: 600, marginBottom: '14px' }}>
-                Zero Touch Pvt. Ltd.
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 2px', letterSpacing: '-0.02em' }}>
+                Cybersecurity Intern
+              </h3>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 500, marginBottom: '16px' }}>
+                Zero Touch Pvt. Ltd. · Chennai
               </p>
-              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.6', marginBottom: '18px' }}>
+              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '22px' }}>
                 Assessed web attack surfaces against OWASP Top 10 vulnerabilities, performed threat modeling, vulnerability auditing, and incident response simulations.
               </p>
               <div className="project-tags" style={{ marginBottom: 0 }}>
@@ -101,16 +105,18 @@ export default function ExperienceEducation() {
             </div>
 
             {/* Job 3 */}
-            <div className="ee-card meta-card" style={{ padding: '28px', borderLeft: '3px solid #10b981' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-                <h5 style={{ margin: 0 }}>2023 – Present</h5>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: 'var(--muted)' }}>SELF-DIRECTED / OPEN SOURCE</span>
+            <div className="ee-card" style={{ padding: '32px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>2023 – Present</span>
+                <span className="ee-role-badge">OPEN SOURCE</span>
               </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: 'var(--fg)', margin: '6px 0 2px' }}>Full-Stack Developer</h3>
-              <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '14px', color: '#10b981', fontWeight: 600, marginBottom: '14px' }}>
-                Self-Directed & Open Source
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 2px', letterSpacing: '-0.02em' }}>
+                Full-Stack Developer
+              </h3>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 500, marginBottom: '16px' }}>
+                Self-Directed & Systems Research
               </p>
-              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.6', marginBottom: '18px' }}>
+              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '22px' }}>
                 Designing and shipping scalable full-stack applications, AI developer environments, and 3D web platforms across Next.js, Node.js, and PostgreSQL.
               </p>
               <div className="project-tags" style={{ marginBottom: 0 }}>
@@ -123,34 +129,34 @@ export default function ExperienceEducation() {
         </div>
 
         {/* 2. Education & Competitive Programming Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '60px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '64px' }}>
           {/* Education Column */}
           <div>
-            <span className="section-badge">// ACADEMIC EDUCATION</span>
+            <span className="section-badge">Academic Education</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', marginTop: '16px' }}>
-              <div className="ee-card meta-card" style={{ padding: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <h5>2023 – 2027 (Expected)</h5>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'var(--bh-red)', fontWeight: 700 }}>
+              <div className="ee-card" style={{ padding: '28px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>2023 – 2027 (Expected)</span>
+                  <span className="ee-role-badge" style={{ fontWeight: 600, color: 'var(--fg)' }}>
                     CGPA: 7.50 / 10
                   </span>
                 </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--fg)', margin: '6px 0 2px' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 4px', letterSpacing: '-0.02em' }}>
                   B.E. Computer Science and Engineering
                 </h3>
                 <p style={{ fontSize: '14px', color: 'var(--muted)', margin: 0 }}>
-                  K.S.R. College of Engineering
+                  K.S.R. College of Engineering · Anna University
                 </p>
               </div>
 
-              <div className="ee-card meta-card" style={{ padding: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <h5>2023 Completion</h5>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'var(--bh-red)', fontWeight: 700 }}>
+              <div className="ee-card" style={{ padding: '28px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>2023 Completion</span>
+                  <span className="ee-role-badge" style={{ fontWeight: 600, color: 'var(--fg)' }}>
                     HSC: 70%
                   </span>
                 </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--fg)', margin: '6px 0 2px' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 4px', letterSpacing: '-0.02em' }}>
                   Higher Secondary Certificate (HSC)
                 </h3>
                 <p style={{ fontSize: '14px', color: 'var(--muted)', margin: 0 }}>
@@ -162,24 +168,25 @@ export default function ExperienceEducation() {
 
           {/* Competitive Programming Column */}
           <div>
-            <span className="section-badge">// COMPETITIVE PROGRAMMING (JAVA DSA)</span>
-            <div className="ee-card meta-card" style={{ padding: '24px', marginTop: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-                <h5>LeetCode Profile</h5>
+            <span className="section-badge">Algorithmic Problem-Solving</span>
+            <div className="ee-card" style={{ padding: '28px', marginTop: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>LeetCode & Java DSA</span>
                 <a
                   href="https://github.com/cheralathan05/leetcode"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'var(--bh-red)', textDecoration: 'none' }}
+                  className="project-link-btn"
+                  style={{ padding: '6px 14px', fontSize: '11px' }}
                 >
-                  View Repo ↗
+                  View LeetCode Repo ↗
                 </a>
               </div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 10px' }}>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 10px', letterSpacing: '-0.02em' }}>
                 200+ Problems Solved in Java
               </h3>
-              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.6', marginBottom: '14px' }}>
-                Active practice tackling core algorithmic patterns with optimal time and space complexity:
+              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '18px' }}>
+                Active algorithmic mastery across core computer science patterns with optimal time and space complexity:
               </p>
               <div className="project-tags" style={{ marginBottom: 0 }}>
                 {[
@@ -200,7 +207,9 @@ export default function ExperienceEducation() {
 
         {/* 3. GitHub & Platform Live Metrics */}
         <div>
-          <span className="section-badge" style={{ marginBottom: '16px' }}>// GITHUB & CODEBASE METRICS</span>
+          <div style={{ marginBottom: '20px' }}>
+            <span className="section-badge">Engineering & Codebase Metrics</span>
+          </div>
           <div className="metrics-grid">
             <div className="metric-box">
               <div className="number">200+</div>
@@ -212,11 +221,11 @@ export default function ExperienceEducation() {
             </div>
             <div className="metric-box">
               <div className="number">422+</div>
-              <div className="label">2026 Git Commits</div>
+              <div className="label">2026 Production Commits</div>
             </div>
             <div className="metric-box">
               <div className="number">45 Days</div>
-              <div className="label">Longest Contribution Streak</div>
+              <div className="label">Longest Continuous Streak</div>
             </div>
             <div className="metric-box">
               <div className="number">12+</div>

@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export const LIQUID_METAL_PALETTE = {
-  // All light tones: grey/deep-orange stops made headings look dull on the dark background.
-  dark: ['#f4f4f5', '#d4d4d8', '#ff9a6b', '#e4e4e7', '#fafafa'],
-  light: ['#18181b', '#52525b', '#c2410c', '#27272a', '#3f3f46'],
+  // Pure monochrome luxury: silver, platinum, titanium, and crisp white/slate
+  dark: ['#ffffff', '#e4e4e7', '#a1a1aa', '#f4f4f5', '#d4d4d8'],
+  light: ['#09090b', '#27272a', '#71717a', '#18181b', '#09090b'],
 };
 
 const ThemeContext = createContext();

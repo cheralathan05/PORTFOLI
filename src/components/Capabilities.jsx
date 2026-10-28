@@ -30,21 +30,21 @@ export default function Capabilities() {
       <div className="container">
         <div className="caps-grid">
           <div className="cap-item">
-            <h4>// 01. Full-Stack Engineering</h4>
+            <h4>01 / Full-Stack Architecture</h4>
             <h3>Scalable Web Systems</h3>
             <p>
               Engineering robust full-stack platforms using React, Next.js, Node.js, and Spring Boot with TypeScript and clean modular boundaries.
             </p>
           </div>
           <div className="cap-item">
-            <h4>// 02. Generative AI & ML</h4>
+            <h4>02 / Generative AI & ML</h4>
             <h3>Intelligent Automations</h3>
             <p>
               Integrating GPT-4, OpenAI APIs, prompt engineering, semantic vector embeddings, and local Ollama LLMs into seamless automated pipelines.
             </p>
           </div>
           <div className="cap-item">
-            <h4>// 03. High Performance & 3D</h4>
+            <h4>03 / High Performance & 3D</h4>
             <h3>Real-Time & Algorithms</h3>
             <p>
               Solving complex data structures with 200+ LeetCode problems, WebSockets, Three.js 3D graphics, and high-concurrency database architectures.

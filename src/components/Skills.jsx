@@ -31,27 +31,28 @@ export default function Skills() {
   return (
     <section id="skills" ref={containerRef}>
       <div className="container">
-        <div className="skills-header">
+        <div className="skills-header" style={{ marginBottom: '40px', paddingBottom: '24px', borderBottom: '1px solid var(--line)' }}>
+          <span className="section-badge">System Architecture & Core Stack</span>
           <h2>
             <LiquidMetalText
               key={isDark ? 'dark' : 'light'}
               colors={isDark ? LIQUID_METAL_PALETTE.dark : LIQUID_METAL_PALETTE.light}
               speed={6}
             >
-              System Architecture
+              Technical Capabilities
             </LiquidMetalText>
           </h2>
-          <p style={{ fontFamily: "'JetBrains Mono', monospace", color: '#ab3503f1' }}>
-            // The stack that powers the singularity
+          <p style={{ color: 'var(--muted)', fontSize: '14px', marginTop: '10px', maxWidth: '600px', lineHeight: '1.6' }}>
+            High-concurrency web frameworks, normalized relational databases, generative AI pipelines, and systems tooling.
           </p>
         </div>
         <div className="skills-grid">
           <div>
             <div className="skill-row">
               <h3>Frontend</h3>
-              <p>React.js / Next.js / Vite / Tailwind</p>
+              <p>React.js / Next.js / Vite / TypeScript</p>
             </div>
-            <div className="skill-row meow">
+            <div className="skill-row">
               <h3>Backend</h3>
               <p>Node.js / Express / NestJS / Spring Boot</p>
             </div>
@@ -65,12 +66,12 @@ export default function Skills() {
               <h3>AI & ML</h3>
               <p>Generative AI / GPT-4 / Ollama / PyTorch</p>
             </div>
-            <div className="skill-row meow">
+            <div className="skill-row">
               <h3>Languages</h3>
               <p>Java / TypeScript / Python / SQL</p>
             </div>
             <div className="skill-row">
-              <h3>3D & Realtime</h3>
+              <h3>Real-Time & DevOps</h3>
               <p>Three.js / WebSockets / Docker / Git</p>
             </div>
           </div>
