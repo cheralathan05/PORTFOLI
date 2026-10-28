@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheralathan B.N // Full-Stack Developer & AI Systems Engineer</title>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Immediate Theme Initializer: prevents initial flash on reload -->
+  <script>
+    (function() {
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.style.backgroundColor = '#0a0a0b';
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.style.backgroundColor = '#ffffff';
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <!-- Netlify Build Form Detection -->
+  <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <textarea name="message"></textarea>
+  </form>
+
+  <div id="root"></div>
+
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

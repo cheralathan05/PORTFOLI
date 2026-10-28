@@ -1,0 +1,26 @@
+﻿# Dependencies
+node_modules/
+
+# Production build
+dist/
+dist-ssr/
+
+# Large screen recordings (stored locally; WebP covers used for lightning-fast web performance)
+*.mp4
+*.webm
+*.mov
+scratch/
+
+# Local Environment & Logs
+.env
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

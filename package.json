@@ -1,0 +1,43 @@
+﻿{
+  "name": "creative-developer-portfolio",
+  "version": "1.0.0",
+  "description": "A high-performance, open-source creative developer portfolio built with React, Vite, GSAP, and Canvas particle physics.",
+  "author": "Cheralathan B.N <cheralathannandha9098@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cheralathan05/Protfolio.git"
+  },
+  "keywords": [
+    "react",
+    "vite",
+    "gsap",
+    "scrolltrigger",
+    "portfolio",
+    "creative-developer",
+    "dark-mode",
+    "particles"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.1",
+    "gsap": "^3.12.5",
+    "motion-organic": "^2.5.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
