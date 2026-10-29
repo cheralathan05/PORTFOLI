@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import { PortalTransitionProvider } from './context/PortalTransitionContext';
 import { FullscreenProvider } from './context/FullscreenContext';
+import FullscreenToggle from './components/FullscreenToggle';
 
 import Preloader from './components/Preloader';
 
@@ -50,6 +51,9 @@ function MainLayout() {
       <BackgroundStars />
       <CustomCursor />
       <ScrollHandler />
+
+      {/* Global Luxury Top-Right Fullscreen Control */}
+      <FullscreenToggle />
 
       {/* Render Main Navigation on Home Page */}
       {isHomePage && <Navbar />}

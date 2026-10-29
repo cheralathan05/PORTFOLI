@@ -5,7 +5,6 @@ import { profileData } from '../data/profileData';
 import { useTheme, LIQUID_METAL_PALETTE } from '../context/ThemeContext';
 import { MoPortalLink } from '../context/PortalTransitionContext';
 import { LiquidMetalText } from 'motion-organic/react';
-import FullscreenToggle from '../components/FullscreenToggle';
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
@@ -89,8 +88,6 @@ export default function ProjectDetailPage() {
               </svg>
             )}
           </button>
-
-          <FullscreenToggle id="detail-fullscreen-toggle" />
         </div>
       </header>
 

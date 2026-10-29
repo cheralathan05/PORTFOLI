@@ -4,7 +4,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTheme } from '../context/ThemeContext';
 import { profileData } from '../data/profileData';
-import FullscreenToggle from './FullscreenToggle';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -462,8 +461,6 @@ export default function Navbar() {
               </svg>
             )}
           </button>
-
-          <FullscreenToggle id="nav-fullscreen-toggle" />
         </div>
       </div>
 
