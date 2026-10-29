@@ -7,11 +7,11 @@ export const profileData = {
   status: "AVAILABLE FOR HIRE",
 
   established: "EST. 2023",
-  coordinates: "LAT 13.0827° N · 80.2707° E",
+  coordinates: "LAT 11.3410° N · 77.7172° E",
 
   email: "cheralathannandha9098@gmail.com",
   phone: "8668180041",
-  location: "Chennai, Tamil Nadu, India",
+  location: "Erode, Tamil Nadu, India",
   careerObjective: "Full-Stack Development, Software Engineering, and AI Engineering roles",
 
   socials: {

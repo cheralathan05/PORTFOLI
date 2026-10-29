@@ -4,24 +4,89 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { LiquidMetalText } from 'motion-organic/react';
 import { useTheme, LIQUID_METAL_PALETTE } from '../context/ThemeContext';
-import { profileData } from '../data/profileData';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Work Experience Dataset with rich impact points and tech taxonomy
+const WORK_EXPERIENCES = [
+  {
+    id: 'gen-ai',
+    number: '01',
+    role: 'Generative AI Intern',
+    company: 'One Yes Technology Pvt. Ltd.',
+    location: 'Chennai, India',
+    period: 'June 2025 · 1 Month',
+    badge: 'INTERNSHIP',
+    type: 'ai',
+    summary: 'Engineered generative AI workflows, prompt optimization routines, and semantic vector embedding pipelines.',
+    impact: [
+      'Architected semantic vector retrieval pipelines with Redis caching to slash OpenAI API latency by 40%.',
+      'Engineered automated prompt evaluation benchmarks and token optimization routines for GPT-4.',
+      'Constructed production-grade REST API integrations linking LLM inference endpoints to frontend client UI.'
+    ],
+    skills: ['GPT-4', 'Python', 'Redis', 'REST APIs', 'Prompt Engineering', 'Vector Embeddings', 'LangChain', 'OpenAI API']
+  },
+  {
+    id: 'cybersec',
+    number: '02',
+    role: 'Cybersecurity Intern',
+    company: 'Zero Touch Pvt. Ltd.',
+    location: 'Chennai, India',
+    period: 'July 2024 · 1 Month',
+    badge: 'INTERNSHIP',
+    type: 'security',
+    summary: 'Assessed web attack surfaces against OWASP Top 10 vulnerabilities, performed threat modeling and incident response simulations.',
+    impact: [
+      'Executed systematic security assessments across web application surfaces targeting OWASP Top 10 vulnerabilities.',
+      'Conducted threat modeling, vulnerability auditing, automated penetration testing scripts, and simulated attack vectors.',
+      'Formulated comprehensive technical remediation reports delivered directly to senior engineering leadership.'
+    ],
+    skills: ['Python', 'OWASP Top 10', 'Threat Modeling', 'Vulnerability Assessment', 'Burp Suite', 'Incident Response', 'Network Security']
+  },
+  {
+    id: 'fullstack-dev',
+    number: '03',
+    role: 'Full-Stack Developer',
+    company: 'Self-Directed & Systems Research',
+    location: 'Autonomous / Remote',
+    period: '2023 – Present',
+    badge: 'ACTIVE / OPEN SOURCE',
+    type: 'systems',
+    summary: 'Designing and shipping scalable full-stack applications, AI developer environments, and 3D web platforms.',
+    impact: [
+      'Engineered high-concurrency full-stack architectures utilizing Next.js, Node.js, Spring Boot, and PostgreSQL.',
+      'Authored 31+ public GitHub repositories with 420+ production commits adhering to clean domain-driven architecture.',
+      'Built interactive 3D web experiences with Three.js graphics, custom GSAP particle physics, and WebSocket streaming.'
+    ],
+    skills: ['React', 'Next.js', 'TypeScript', 'Node.js', 'Spring Boot', 'PostgreSQL', 'Docker', 'Three.js', 'TailwindCSS', 'Redis']
+  }
+];
 
 export default function ExperienceEducation() {
   const containerRef = useRef(null);
   const { isDark } = useTheme();
 
+  const handleSpotlight = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
+
   useGSAP(() => {
-    const cards = containerRef.current.querySelectorAll('.ee-card, .metric-box');
-    cards.forEach((card) => {
+    // Staggered perspective reveal for all experience cards
+    const cards = containerRef.current.querySelectorAll('.ee-spotlight-card');
+    cards.forEach((card, index) => {
       gsap.fromTo(
         card,
-        { opacity: 0, y: 35 },
+        { opacity: 0, y: 35, scale: 0.98 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.7,
+          scale: 1,
+          duration: 0.75,
+          delay: (index % 3) * 0.1,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: card,
@@ -31,205 +96,125 @@ export default function ExperienceEducation() {
         }
       );
     });
+
+    // Animate timeline connected pulse line
+    gsap.fromTo(
+      '.ee-timeline-rail-fill',
+      { height: '0%' },
+      {
+        height: '100%',
+        duration: 1.5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#work-timeline-container',
+          start: 'top 80%',
+          end: 'bottom 80%',
+          scrub: 0.8
+        }
+      }
+    );
   }, { scope: containerRef });
 
   return (
-    <section id="experience-education" ref={containerRef} style={{ padding: '120px 0', borderTop: '1px solid var(--line)' }}>
+    <section id="experience-education" ref={containerRef} className="ee-section">
       <div className="container">
         {/* Section Header */}
-        <div style={{ marginBottom: '56px' }}>
-          <span className="section-badge">Background & Track Record</span>
-          <h2>
-            <LiquidMetalText
-              key={`ee-${isDark ? 'dark' : 'light'}`}
-              colors={isDark ? LIQUID_METAL_PALETTE.dark : LIQUID_METAL_PALETTE.light}
-              speed={6}
-            >
-              Experience & Education
-            </LiquidMetalText>
-          </h2>
-          <p style={{ color: 'var(--muted)', fontSize: '14px', marginTop: '10px', maxWidth: '640px', lineHeight: '1.6' }}>
-            Professional journey across generative AI pipelines, distributed full-stack architectures, and algorithmic problem-solving.
-          </p>
-        </div>
-
-        {/* 1. Work Experience Grid */}
-        <div style={{ marginBottom: '64px' }}>
-          <div style={{ marginBottom: '24px' }}>
-            <span className="section-badge">Work Experience</span>
+        <div className="ee-header-wrap">
+          <div className="ee-header-meta">
+            <span className="section-badge">
+              <span className="ee-pulse-dot" />
+              BACKGROUND & TRACK RECORD
+            </span>
+            <span className="ee-header-tag mono">VERIFIED MILESTONES // 2023 - 2026</span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-            {/* Job 1 */}
-            <div className="ee-card" style={{ padding: '32px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>June 2025 · 1 Month</span>
-                <span className="ee-role-badge">INTERNSHIP</span>
-              </div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 2px', letterSpacing: '-0.02em' }}>
-                Generative AI Intern
-              </h3>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 500, marginBottom: '16px' }}>
-                One Yes Technology Pvt. Ltd. · Chennai
-              </p>
-              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '22px' }}>
-                Engineered generative AI workflows, prompt optimization routines, and semantic vector embedding pipelines with Redis caching and REST API integrations.
-              </p>
-              <div className="project-tags" style={{ marginBottom: 0 }}>
-                {['GPT-4', 'Python', 'Redis', 'REST APIs', 'Prompt Engineering', 'Semantic Embeddings'].map((t) => (
-                  <span className="tag" key={t}>{t}</span>
-                ))}
-              </div>
-            </div>
+          <div className="ee-header-main">
+            <h2>
+              <LiquidMetalText
+                key={`ee-${isDark ? 'dark' : 'light'}`}
+                colors={isDark ? LIQUID_METAL_PALETTE.dark : LIQUID_METAL_PALETTE.light}
+                speed={6}
+              >
+                Work Experience
+              </LiquidMetalText>
+            </h2>
 
-            {/* Job 2 */}
-            <div className="ee-card" style={{ padding: '32px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>July 2024 · 1 Month</span>
-                <span className="ee-role-badge">INTERNSHIP</span>
-              </div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 2px', letterSpacing: '-0.02em' }}>
-                Cybersecurity Intern
-              </h3>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 500, marginBottom: '16px' }}>
-                Zero Touch Pvt. Ltd. · Chennai
-              </p>
-              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '22px' }}>
-                Assessed web attack surfaces against OWASP Top 10 vulnerabilities, performed threat modeling, vulnerability auditing, and incident response simulations.
-              </p>
-              <div className="project-tags" style={{ marginBottom: 0 }}>
-                {['Python', 'OWASP Top 10', 'Threat Modeling', 'Vulnerability Assessment', 'Incident Response'].map((t) => (
-                  <span className="tag" key={t}>{t}</span>
-                ))}
-              </div>
-            </div>
-
-            {/* Job 3 */}
-            <div className="ee-card" style={{ padding: '32px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>2023 – Present</span>
-                <span className="ee-role-badge">OPEN SOURCE</span>
-              </div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 2px', letterSpacing: '-0.02em' }}>
-                Full-Stack Developer
-              </h3>
-              <p style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 500, marginBottom: '16px' }}>
-                Self-Directed & Systems Research
-              </p>
-              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '22px' }}>
-                Designing and shipping scalable full-stack applications, AI developer environments, and 3D web platforms across Next.js, Node.js, and PostgreSQL.
-              </p>
-              <div className="project-tags" style={{ marginBottom: 0 }}>
-                {['React', 'Next.js', 'TypeScript', 'Node.js', 'NestJS', 'PostgreSQL', 'MySQL', 'Prisma', 'Docker', 'Three.js'].map((t) => (
-                  <span className="tag" key={t}>{t}</span>
-                ))}
-              </div>
-            </div>
+            <p className="ee-header-desc">
+              Engineering journey spanning generative AI workflows, distributed full-stack platforms,
+              and cybersecurity defense simulations.
+            </p>
           </div>
         </div>
 
-        {/* 2. Education & Competitive Programming Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '64px' }}>
-          {/* Education Column */}
-          <div>
-            <span className="section-badge">Academic Education</span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', marginTop: '16px' }}>
-              <div className="ee-card" style={{ padding: '28px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>2023 – 2027 (Expected)</span>
-                  <span className="ee-role-badge" style={{ fontWeight: 600, color: 'var(--fg)' }}>
-                    CGPA: 7.50 / 10
-                  </span>
-                </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 4px', letterSpacing: '-0.02em' }}>
-                  B.E. Computer Science and Engineering
-                </h3>
-                <p style={{ fontSize: '14px', color: 'var(--muted)', margin: 0 }}>
-                  K.S.R. College of Engineering · Anna University
-                </p>
-              </div>
-
-              <div className="ee-card" style={{ padding: '28px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>2023 Completion</span>
-                  <span className="ee-role-badge" style={{ fontWeight: 600, color: 'var(--fg)' }}>
-                    HSC: 70%
-                  </span>
-                </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 4px', letterSpacing: '-0.02em' }}>
-                  Higher Secondary Certificate (HSC)
-                </h3>
-                <p style={{ fontSize: '14px', color: 'var(--muted)', margin: 0 }}>
-                  Saru Matric Higher Secondary School
-                </p>
-              </div>
+        {/* 1. WORK EXPERIENCE (Cyber-Timeline Rail) */}
+        <div id="work-timeline-container" className="ee-timeline-block">
+          <div className="ee-block-header">
+            <div className="ee-block-title-wrap">
+              <span className="section-badge">Work Experience & Research</span>
+              <span className="ee-block-counter mono">03 ROLES // ENTERPRISE & OPEN SOURCE</span>
+            </div>
+            <div className="ee-timeline-live-tag mono">
+              <span className="ee-live-indicator" />
+              <span>SYSTEM STATUS: PRODUCTION READY</span>
             </div>
           </div>
 
-          {/* Competitive Programming Column */}
-          <div>
-            <span className="section-badge">Algorithmic Problem-Solving</span>
-            <div className="ee-card" style={{ padding: '28px', marginTop: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: 'var(--muted)' }}>LeetCode & Java DSA</span>
-                <a
-                  href="https://github.com/cheralathan05/leetcode"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link-btn"
-                  style={{ padding: '6px 14px', fontSize: '11px' }}
+          <div className="ee-timeline-track">
+            {/* The Connected Optical Rail Line */}
+            <div className="ee-timeline-rail">
+              <div className="ee-timeline-rail-fill" />
+            </div>
+
+            <div className="ee-cards-grid">
+              {WORK_EXPERIENCES.map((exp) => (
+                <div
+                  key={exp.id}
+                  className={`ee-spotlight-card spotlight-card ee-type-${exp.type}`}
+                  onMouseMove={handleSpotlight}
                 >
-                  View LeetCode Repo ↗
-                </a>
-              </div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 600, color: 'var(--fg)', margin: '4px 0 10px', letterSpacing: '-0.02em' }}>
-                200+ Problems Solved in Java
-              </h3>
-              <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.65', marginBottom: '18px' }}>
-                Active algorithmic mastery across core computer science patterns with optimal time and space complexity:
-              </p>
-              <div className="project-tags" style={{ marginBottom: 0 }}>
-                {[
-                  'Dynamic Programming',
-                  'Binary Trees & BST',
-                  'Graph Algorithms',
-                  'BFS & DFS',
-                  "Dijkstra's Shortest Path",
-                  'Two Pointers',
-                  'Sliding Window'
-                ].map((topic) => (
-                  <span className="tag" key={topic}>{topic}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+                  {/* Card Corner Index */}
+                  <div className="ee-card-top">
+                    <div className="ee-card-meta-left">
+                      <span className="ee-card-num mono">{exp.number}</span>
+                      <span className="ee-card-period mono">{exp.period}</span>
+                    </div>
 
-        {/* 3. GitHub & Platform Live Metrics */}
-        <div>
-          <div style={{ marginBottom: '20px' }}>
-            <span className="section-badge">Engineering & Codebase Metrics</span>
-          </div>
-          <div className="metrics-grid">
-            <div className="metric-box">
-              <div className="number">200+</div>
-              <div className="label">LeetCode Problems Solved</div>
-            </div>
-            <div className="metric-box">
-              <div className="number">31</div>
-              <div className="label">Public GitHub Repositories</div>
-            </div>
-            <div className="metric-box">
-              <div className="number">422+</div>
-              <div className="label">2026 Production Commits</div>
-            </div>
-            <div className="metric-box">
-              <div className="number">45 Days</div>
-              <div className="label">Longest Continuous Streak</div>
-            </div>
-            <div className="metric-box">
-              <div className="number">12+</div>
-              <div className="label">GitHub Stars Earned</div>
+                    <span className={`ee-role-badge badge-${exp.type} mono`}>
+                      <span className="badge-dot" />
+                      {exp.badge}
+                    </span>
+                  </div>
+
+                  {/* Role & Company Header */}
+                  <div className="ee-card-title-area">
+                    <h3 className="ee-role-title">{exp.role}</h3>
+                    <div className="ee-company-row">
+                      <span className="ee-company-name">{exp.company}</span>
+                      <span className="ee-company-dot">·</span>
+                      <span className="ee-company-loc mono">{exp.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Impact Summary Points */}
+                  <div className="ee-impact-list">
+                    {exp.impact.map((point, i) => (
+                      <div key={i} className="ee-impact-item">
+                        <span className="ee-bullet-icon">✦</span>
+                        <p>{point}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Tech Taxonomy Chips */}
+                  <div className="ee-tags-wrap">
+                    {exp.skills.map((skill) => (
+                      <span key={skill} className="ee-tech-pill mono">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

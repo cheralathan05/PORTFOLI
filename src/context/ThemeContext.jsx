@@ -17,11 +17,13 @@ export function ThemeProvider({ children }) {
     const isDark = theme === 'dark';
     if (isDark) {
       document.documentElement.setAttribute('data-theme', 'dark');
-      document.documentElement.style.backgroundColor = '#0a0a0b';
+      document.documentElement.style.backgroundColor = '#000000';
+      document.body.style.backgroundColor = '#000000';
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.removeAttribute('data-theme');
       document.documentElement.style.backgroundColor = '#ffffff';
+      document.body.style.backgroundColor = '#ffffff';
       localStorage.setItem('theme', 'light');
     }
 

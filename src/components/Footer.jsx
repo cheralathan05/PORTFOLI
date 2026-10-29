@@ -59,7 +59,7 @@ export default function Footer() {
               </a>
               <a href="#experience-education" className="footer-nav-item" onClick={(e) => scrollToSection(e, 'experience-education')}>
                 <span className="item-num">03</span>
-                <span>Experience & Education</span>
+                <span>Work Experience</span>
               </a>
               <a href="#projects" className="footer-nav-item" onClick={(e) => scrollToSection(e, 'projects')}>
                 <span className="item-num">04</span>
@@ -91,7 +91,7 @@ export default function Footer() {
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                 <path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z" />
               </svg>
-              <span>+91 {profileData.phone} (Chennai, India)</span>
+              <span>+91 {profileData.phone} (Erode, India)</span>
             </a>
 
             <div className="footer-social-channels">
@@ -146,6 +146,16 @@ export default function Footer() {
             </div>
 
             <div className="footer-actions">
+              <button
+                type="button"
+                className="back-to-top-btn"
+                id="footer-replay-intro"
+                onClick={() => window.dispatchEvent(new CustomEvent('replay-preloader'))}
+                title="Replay Loading Animation"
+              >
+                <span>Replay Intro ↺</span>
+              </button>
+
               <button
                 type="button"
                 className="back-to-top-btn"

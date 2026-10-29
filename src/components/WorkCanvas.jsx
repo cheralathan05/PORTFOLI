@@ -248,28 +248,12 @@ export default function WorkCanvas() {
                       draggable="false"
                     >
                       <span className="cv-media">
-                        {t.p.video ? (
-                          <video
-                            src={t.p.video}
-                            poster={t.p.image}
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            draggable="false"
-                            ref={(el) => {
-                              if (el && el.paused) {
-                                el.play().catch(() => {});
-                              }
-                            }}
-                          />
-                        ) : (
-                          <img src={t.p.image} alt={t.p.title} loading="lazy" draggable="false" />
-                        )}
+                        <img src={t.p.image} alt={t.p.title} loading="lazy" draggable="false" />
                       </span>
                       <span className="cv-caption">
                         <b>{t.p.num}</b> {t.p.title}
                         <i>{t.p.stack.slice(0, 2).join(' + ')}</i>
+                        {t.p.live && <span className="cv-live-badge mono">● LIVE</span>}
                       </span>
                     </MoPortalLink>
                   </div>

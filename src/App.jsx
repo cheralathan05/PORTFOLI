@@ -6,6 +6,9 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import { PortalTransitionProvider } from './context/PortalTransitionContext';
+import { FullscreenProvider } from './context/FullscreenContext';
+
+import Preloader from './components/Preloader';
 
 function ScrollHandler() {
   const { pathname, hash } = useLocation();
@@ -30,9 +33,20 @@ function ScrollHandler() {
 function MainLayout() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const [showPreloader, setShowPreloader] = React.useState(true);
+
+  // Allow replaying the intro via custom event
+  React.useEffect(() => {
+    const handleReplay = () => setShowPreloader(true);
+    window.addEventListener('replay-preloader', handleReplay);
+    return () => window.removeEventListener('replay-preloader', handleReplay);
+  }, []);
 
   return (
     <>
+      {showPreloader && (
+        <Preloader onComplete={() => setShowPreloader(false)} />
+      )}
       <BackgroundStars />
       <CustomCursor />
       <ScrollHandler />
@@ -52,9 +66,11 @@ function MainLayout() {
 export default function App() {
   return (
     <BrowserRouter>
-      <PortalTransitionProvider>
-        <MainLayout />
-      </PortalTransitionProvider>
+      <FullscreenProvider>
+        <PortalTransitionProvider>
+          <MainLayout />
+        </PortalTransitionProvider>
+      </FullscreenProvider>
     </BrowserRouter>
   );
 }

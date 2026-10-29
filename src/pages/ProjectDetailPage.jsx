@@ -5,6 +5,7 @@ import { profileData } from '../data/profileData';
 import { useTheme, LIQUID_METAL_PALETTE } from '../context/ThemeContext';
 import { MoPortalLink } from '../context/PortalTransitionContext';
 import { LiquidMetalText } from 'motion-organic/react';
+import FullscreenToggle from '../components/FullscreenToggle';
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
@@ -45,48 +46,52 @@ export default function ProjectDetailPage() {
         <span className="project-nav-center">
           // PROJECT {project.num} OF {String(projects.length).padStart(2, '0')}
         </span>
-        <button
-          className="theme-toggle"
-          id="theme-toggle"
-          aria-label="Toggle Dark Mode"
-          onClick={toggleTheme}
-        >
-          {isDark ? (
-            <svg
-              id="sun-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="5" />
-              <line x1="12" y1="1" x2="12" y2="3" />
-              <line x1="12" y1="21" x2="12" y2="23" />
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-              <line x1="1" y1="12" x2="3" y2="12" />
-              <line x1="21" y1="12" x2="23" y2="12" />
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-            </svg>
-          ) : (
-            <svg
-              id="moon-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-          )}
-        </button>
+        <div className="project-nav-controls">
+          <button
+            className="theme-toggle"
+            id="theme-toggle"
+            aria-label="Toggle Dark Mode"
+            onClick={toggleTheme}
+          >
+            {isDark ? (
+              <svg
+                id="sun-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            ) : (
+              <svg
+                id="moon-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            )}
+          </button>
+
+          <FullscreenToggle id="detail-fullscreen-toggle" />
+        </div>
       </header>
 
       {/* Main Case Study Content */}
@@ -125,22 +130,35 @@ export default function ProjectDetailPage() {
             </div>
           </div>
 
-          {project.live && (
-            <a className="project-link-btn project-source-btn" href={project.live} target="_blank" rel="noopener noreferrer">
-              <span>Explore it live</span>
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </a>
-          )}
-          {project.github && (
-            <a className="project-link-btn project-source-btn" href={project.github} target="_blank" rel="noopener noreferrer">
-              <span>Source on GitHub</span>
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </a>
-          )}
+          <div className="project-detail-actions">
+            {project.live && (
+              <a
+                className="project-link-btn project-live-cta-btn"
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="live-btn-dot" />
+                <span>Launch Live Application</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M7 17L17 7M7 7h10v10" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            )}
+            {project.github && (
+              <a
+                className="project-link-btn project-source-btn"
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Source on GitHub</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            )}
+          </div>
 
           {/* Main Visual Showcase */}
           <div className="project-visual-showcase">
@@ -154,6 +172,18 @@ export default function ProjectDetailPage() {
                   loop
                   playsInline
                   controls
+                  onLoadedData={(e) => {
+                    e.currentTarget.defaultMuted = true;
+                    e.currentTarget.muted = true;
+                    e.currentTarget.play().catch(() => {});
+                  }}
+                  ref={(el) => {
+                    if (el) {
+                      el.defaultMuted = true;
+                      el.muted = true;
+                      el.play().catch(() => {});
+                    }
+                  }}
                 />
               ) : (
                 <img src={project.image} alt={`${project.title} Featured Visual`} />

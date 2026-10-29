@@ -53,9 +53,18 @@ export default function ProjectPanels() {
                     muted
                     loop
                     playsInline
-                    preload={open ? 'auto' : 'metadata'}
+                    preload={open ? 'auto' : 'none'}
+                    onLoadedData={(e) => {
+                      if (open) {
+                        e.currentTarget.defaultMuted = true;
+                        e.currentTarget.muted = true;
+                        e.currentTarget.play().catch(() => {});
+                      }
+                    }}
                     ref={(el) => {
                       if (el) {
+                        el.defaultMuted = true;
+                        el.muted = true;
                         if (open) {
                           el.play().catch(() => {});
                         } else {
@@ -78,14 +87,23 @@ export default function ProjectPanels() {
                 )}
                 <span className="panel-spine" aria-hidden={open}>{p.title}</span>
                 <div className="panel-body" aria-hidden={!open}>
-                  <span className="panel-num">{p.num}</span>
+                  <div className="panel-header-row">
+                    <span className="panel-num">{p.num}</span>
+                    {p.live && (
+                      <span className="panel-live-tag mono">
+                        <span className="panel-live-dot" />
+                        LIVE DEMO
+                      </span>
+                    )}
+                  </div>
                   <h3>{p.title}</h3>
                   <p>{p.shortDesc}</p>
                   <div className="panel-meta">
                     <span>{p.stack.slice(0, 3).join(' · ')}</span>
                     {open && p.live && (
-                      <a className="panel-link panel-link-ghost" href={p.live} target="_blank" rel="noopener noreferrer">
-                        Live ↗
+                      <a className="panel-link panel-link-live" href={p.live} target="_blank" rel="noopener noreferrer">
+                        <span className="panel-live-dot" />
+                        <span>Launch Live ↗</span>
                       </a>
                     )}
                     {open && (

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -10,6 +10,113 @@ import { useTheme, LIQUID_METAL_PALETTE } from '../context/ThemeContext';
 gsap.registerPlugin(ScrollTrigger);
 
 const featured = projects.filter((p) => p.featured);
+
+function FeaturedVideo({ src, poster, objectPosition, title }) {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Strict muted setting to bypass browser autoplay policies
+    video.defaultMuted = true;
+    video.muted = true;
+
+    // Use IntersectionObserver to start playback when visible and pause when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.defaultMuted = true;
+          video.muted = true;
+          video
+            .play()
+            .then(() => setIsPlaying(true))
+            .catch(() => {
+              // Retry on user interaction
+            });
+        } else {
+          video.pause();
+          setIsPlaying(false);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [src]);
+
+  const togglePlay = (e) => {
+    e.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultMuted = true;
+    video.muted = true;
+
+    if (video.paused) {
+      video
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  return (
+    <div
+      className="feature-video-wrapper"
+      onClick={togglePlay}
+      style={{ cursor: 'pointer', width: '100%', height: '100%', position: 'relative' }}
+      title={isPlaying ? 'Click to pause' : 'Click to play demo'}
+    >
+      <video
+        ref={videoRef}
+        src={src}
+        poster={poster}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onLoadedData={(e) => {
+          e.currentTarget.defaultMuted = true;
+          e.currentTarget.muted = true;
+          e.currentTarget.play().catch(() => {});
+        }}
+        style={objectPosition ? { objectPosition } : undefined}
+      />
+      <button
+        type="button"
+        className="video-play-indicator"
+        aria-label={isPlaying ? 'Pause demo video' : 'Play demo video'}
+        onClick={togglePlay}
+      >
+        {isPlaying ? (
+          <>
+            <span className="video-dot-live" />
+            <span>DEMO PLAYING</span>
+          </>
+        ) : (
+          <>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span>CLICK TO PLAY</span>
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
 
 export default function FeaturedWork() {
   const containerRef = useRef(null);
@@ -50,23 +157,70 @@ export default function FeaturedWork() {
   return (
     <section id="projects" className="featured-section" ref={containerRef}>
       <div className="container featured-header">
-        <span className="section-badge">Featured Engineering Work</span>
-        <h2>
-          <LiquidMetalText
-            key={`featured-${isDark ? 'dark' : 'light'}`}
-            colors={isDark ? LIQUID_METAL_PALETTE.dark : LIQUID_METAL_PALETTE.light}
-            speed={6}
-          >
-            Featured Work
-          </LiquidMetalText>
-        </h2>
+        <div className="featured-header-row">
+          <div>
+            <span className="section-badge">
+              <span className="live-pulse-dot" />
+              Verified Production Builds
+            </span>
+            <h2>
+              <LiquidMetalText
+                key={`featured-${isDark ? 'dark' : 'light'}`}
+                colors={isDark ? LIQUID_METAL_PALETTE.dark : LIQUID_METAL_PALETTE.light}
+                speed={6}
+              >
+                Featured Work
+              </LiquidMetalText>
+            </h2>
+          </div>
+          <div className="live-systems-status mono">
+            <span className="live-pulse-ring">
+              <span className="live-status-dot" />
+            </span>
+            <span>5 CLOUD APPS DEPLOYED // RENDER</span>
+          </div>
+        </div>
+
+        {/* Innovative Live Deployments Quick-Launch Dock */}
+        <div className="live-deployments-dock">
+          <div className="dock-label mono">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            <span>LIVE LAUNCHPAD:</span>
+          </div>
+          <div className="dock-chips">
+            {projects.filter(p => p.live).map((p) => (
+              <a
+                key={`dock-${p.id}`}
+                href={p.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="dock-chip mono"
+                title={`Launch ${p.title} Live Application`}
+              >
+                <span className="chip-dot" />
+                <span className="chip-text">{p.liveShortName || p.title}</span>
+                <span className="chip-arrow">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
 
       {featured.map((p) => (
         <article className="feature-card" key={p.id} style={{ '--card-accent': p.accent }}>
           <div className="feature-inner">
             <div className="feature-copy">
-              <span className="feature-num">{p.num}</span>
+              <div className="feature-top-meta">
+                <span className="feature-num">{p.num}</span>
+                {p.live && (
+                  <span className="feature-live-pill mono">
+                    <span className="live-btn-dot" />
+                    LIVE ON RENDER
+                  </span>
+                )}
+              </div>
               <h3>{p.title}</h3>
               <p className="feature-badge">{p.badge}</p>
               <p className="feature-desc">{p.shortDesc}</p>
@@ -82,6 +236,21 @@ export default function FeaturedWork() {
                 {p.stack.map((t) => <span className="tag" key={t}>{t}</span>)}
               </div>
               <div className="feature-actions">
+                {p.live && (
+                  <a
+                    className="feature-live-btn"
+                    href={p.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Launch ${p.title} Live Application`}
+                  >
+                    <span className="live-btn-dot" />
+                    <span>Launch Live App</span>
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M7 17L17 7M7 7h10v10" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </a>
+                )}
                 <MoPortalLink
                   to={`/project/${p.id}`}
                   transition={p.transition}
@@ -101,20 +270,27 @@ export default function FeaturedWork() {
               </div>
             </div>
             <div className="feature-media">
+              {p.live && (
+                <a
+                  href={p.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="feature-media-live-hud"
+                  title={`Launch ${p.title} Live Application in New Tab`}
+                >
+                  <span className="live-hud-dot-wrap">
+                    <span className="live-hud-dot-ring" />
+                    <span className="live-hud-dot" />
+                  </span>
+                  <span className="live-hud-label mono">LIVE DEMO ↗</span>
+                </a>
+              )}
               {p.video ? (
-                <video
+                <FeaturedVideo
                   src={p.video}
                   poster={p.image}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  ref={(el) => {
-                    if (el && el.paused) {
-                      el.play().catch(() => {});
-                    }
-                  }}
-                  style={p.imagePosition ? { objectPosition: p.imagePosition } : undefined}
+                  objectPosition={p.imagePosition}
+                  title={p.title}
                 />
               ) : (
                 <img src={p.image} alt={`${p.title} preview`} loading="lazy" style={p.imagePosition ? { objectPosition: p.imagePosition } : undefined} />

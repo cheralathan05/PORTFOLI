@@ -77,16 +77,18 @@ export default function Hero() {
         <h4>Postgres & Redis</h4>
         <p>// Systems & Data</p>
       </div>
-      <div style={{ textAlign: 'center', marginBottom: '20px', zIndex: 2, position: 'relative' }}>
-        <span className="section-badge" style={{ padding: '6px 14px', fontSize: '11px', letterSpacing: '0.08em' }}>
-          <span className="status-dot-active" />
-          CHERALATHAN B.N · SYSTEMS & AI ARCHITECT
-        </span>
+      <div className="hero-content">
+        <div className="hero-badge-wrap">
+          <span className="section-badge hero-status-pill">
+            <span className="status-dot-active" />
+            CHERALATHAN B.N · SYSTEMS & AI ARCHITECT
+          </span>
+        </div>
+        <h1>
+          {profileData.rolePrefix} <br />
+          <span className="italic mo-liquid-sheen">{profileData.roleHighlight}</span>
+        </h1>
       </div>
-      <h1>
-        {profileData.rolePrefix} <br />
-        <span className="italic mo-liquid-sheen">{profileData.roleHighlight}</span>
-      </h1>
       <div className="hero-meta">
         <span>{profileData.location}</span>
         <VariablePhysicsText color="var(--muted)" minWeight={300} maxWeight={700} continuousWave={true}>

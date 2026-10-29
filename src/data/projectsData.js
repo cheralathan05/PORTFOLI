@@ -18,6 +18,8 @@ export const projects = [
     imagePosition: "50% 0%",
     accent: "#ea580c",
     github: "https://github.com/cheralathan05",
+    live: "https://crm-5-okg3.onrender.com/login",
+    liveShortName: "CRM & Business OS",
     challenge: {
       tag: "01 // CONTEXT",
       title: "Consolidating Complex Business Operations",
@@ -75,6 +77,8 @@ export const projects = [
     imagePosition: "50% 0%",
     accent: "#6366f1",
     github: "https://github.com/cheralathan05",
+    live: "https://mini-browser-n9wi.onrender.com/",
+    liveShortName: "Mini Browser AI",
     challenge: {
       tag: "01 // CONTEXT",
       title: "Context-Aware Browsing Without Sacrificing Privacy",
@@ -132,6 +136,8 @@ export const projects = [
     imagePosition: "50% 0%",
     accent: "#10b981",
     github: "https://github.com/cheralathan05",
+    live: "https://notes-7-uyln.onrender.com",
+    liveShortName: "Notes & AppFlowy",
     challenge: {
       tag: "01 // CONTEXT",
       title: "Real-Time Telemetry for Engineering Teams",
@@ -227,6 +233,7 @@ export const projects = [
   {
     id: "ai-resume-analyzer",
     num: "05",
+    featured: true,
     title: "AI Resume Analyzer",
     badge: "// ATS SCORING // GENERATIVE AI & NLP",
     shortDesc: "Automated resume parser, ATS benchmark scoring, semantic skill extraction, and personalized career roadmap generator.",
@@ -239,7 +246,11 @@ export const projects = [
     transitionWord: "RESUME",
     image: "/covers/ai-resume-analyzer.webp",
     video: "/resume-project.mp4",
+    accent: "#06b6d4",
+    imagePosition: "50% 0%",
     github: "https://github.com/cheralathan05",
+    live: "https://ai-resume-analyzer-f3kq.onrender.com/",
+    liveShortName: "AI Resume Analyzer",
     challenge: {
       tag: "01 // CONTEXT",
       title: "Cracking Modern Applicant Tracking Systems",
@@ -281,6 +292,7 @@ export const projects = [
   {
     id: "calendar-clone",
     num: "06",
+    featured: true,
     title: "Calendar Clone",
     badge: "// EVENT SCHEDULING // OAUTH & VIDEO CONFERENCING",
     shortDesc: "Full-featured calendar management system supporting recurring events, OAuth sync, and video conference generation.",
@@ -293,7 +305,11 @@ export const projects = [
     transitionWord: "CALENDAR",
     image: "/covers/calendar-clone.webp",
     video: "/Calendar.mp4",
+    accent: "#8b5cf6",
+    imagePosition: "50% 0%",
     github: "https://github.com/cheralathan05",
+    live: "https://calendar-1-uzec.onrender.com",
+    liveShortName: "Calendar Cloud",
     challenge: {
       tag: "01 // CONTEXT",
       title: "Eliminating Scheduling Friction and Timezone Bugs",
