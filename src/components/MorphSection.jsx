@@ -6,6 +6,10 @@ import { profileData } from '../data/profileData';
 
 gsap.registerPlugin(ScrollTrigger);
 
+if (typeof window !== 'undefined') {
+  window.ScrollTrigger = ScrollTrigger;
+}
+
 function LiquidLensText({ text }) {
   const containerRef = useRef(null);
   const bubbleRef = useRef(null);
@@ -44,52 +48,116 @@ export default function MorphSection() {
     const section = containerRef.current;
     if (!section) return;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.8,
-        invalidateOnRefresh: true,
-      },
+    const mm = gsap.matchMedia();
+
+    // 1. Desktop / Laptop (width >= 769px) - 100% UNTOUCHED ORIGINAL BEHAVIOR
+    mm.add('(min-width: 769px)', () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      tl.to(
+        '#dev-image',
+        {
+          scale: 0.88,
+          opacity: 0,
+          duration: 1.5,
+          ease: 'power1.inOut',
+        },
+        0
+      );
+
+      tl.fromTo(
+        '#dev-text',
+        {
+          opacity: 0,
+          scale: 0.85,
+        },
+        {
+          opacity: 1,
+          scale: 1.2,
+          duration: 1.5,
+          ease: 'power1.inOut',
+        },
+        0
+      );
+
+      tl.to({}, { duration: 0.6 });
+
+      return () => {
+        tl.kill();
+      };
     });
 
-    // 1. Simultaneous Cross-fade Morph Blend:
-    // Both image and text animate together from the very start (time 0)
-    // creating a seamless, cinematic dissolve between the photo and typography.
-    tl.to(
-      '#dev-image',
-      {
-        scale: 0.88,
-        opacity: 0,
-        duration: 1.5,
-        ease: 'power1.inOut',
-      },
-      0
-    );
+    // 2. Mobile View (width <= 768px) - Pinned firmly, completes name, dissolves away cleanly with zero trailing gap
+    mm.add('(max-width: 768px)', () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=90%',
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
 
-    tl.fromTo(
-      '#dev-text',
-      {
-        opacity: 0,
-        scale: 0.85,
-      },
-      {
-        opacity: 1,
-        scale: 1.2,
-        duration: 1.5,
-        ease: 'power1.inOut',
-      },
-      0
-    );
+      // Phase 1: Cross-fade morph blend (photo dissolves out, name dissolves in)
+      tl.to(
+        '#dev-image',
+        {
+          scale: 0.88,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'power1.inOut',
+        },
+        0
+      );
 
-    // 2. Hold Phase:
-    // Once the morph blend finishes (image reaches 0% and text reaches 100%),
-    // keep the text fully visible and hold the state before un-sticking.
-    tl.to({}, { duration: 0.6 });
+      tl.fromTo(
+        '#dev-text',
+        {
+          opacity: 0,
+          scale: 0.85,
+        },
+        {
+          opacity: 1,
+          scale: 1.08,
+          duration: 0.9,
+          ease: 'power1.inOut',
+        },
+        0
+      );
+
+      // Phase 2: Hold phase so the complete name is clearly readable
+      tl.to({}, { duration: 0.35 });
+
+      // Phase 3: Exit dissolve - after animation, the name dissolves out completely (is gone!)
+      tl.to(
+        '#dev-text',
+        {
+          opacity: 0,
+          scale: 1.12,
+          duration: 0.65,
+          ease: 'power1.inOut',
+        }
+      );
+
+      return () => {
+        tl.kill();
+      };
+    });
 
     return () => {
-      tl.kill();
+      mm.revert();
     };
   }, { scope: containerRef });
 

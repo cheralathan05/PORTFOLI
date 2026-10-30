@@ -181,21 +181,38 @@ export default function GoBelowMatrix() {
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    // Mouse tracking for interactive phosphor illumination wave
-    const onMouseMove = (e) => {
+    // Mouse & Touch tracking for interactive phosphor illumination wave
+    const updatePointerPos = (clientX, clientY) => {
       const rect = canvas.getBoundingClientRect();
       mousePosRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        x: clientX - rect.left,
+        y: clientY - rect.top
       };
+    };
+
+    const onMouseMove = (e) => {
+      updatePointerPos(e.clientX, e.clientY);
     };
 
     const onMouseLeave = () => {
       mousePosRef.current = { x: -1000, y: -1000 };
     };
 
+    const onTouchMove = (e) => {
+      if (e.touches && e.touches[0]) {
+        updatePointerPos(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+
+    const onTouchEnd = () => {
+      mousePosRef.current = { x: -1000, y: -1000 };
+    };
+
     canvas.addEventListener('mousemove', onMouseMove);
     canvas.addEventListener('mouseleave', onMouseLeave);
+    canvas.addEventListener('touchstart', onTouchMove, { passive: true });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: true });
+    canvas.addEventListener('touchend', onTouchEnd, { passive: true });
 
     // Render loop
     const render = () => {
@@ -211,25 +228,26 @@ export default function GoBelowMatrix() {
       ctx.fillStyle = isCurrentDark ? '#000000' : '#ffffff';
       ctx.fillRect(0, 0, width, height);
 
-      // Target 13 to 14 rows vertically
-      const rows = 13;
-      let dotPitch = height / rows;
+      // Target 13 rows vertically by default on desktop
+      let dotPitch = height / 13;
       let cols = Math.floor(width / dotPitch);
 
-      // CRITICAL FIX: Ensure all text fits with zero cutoff!
-      // If screen is narrow, adjust dotPitch so totalTextCols + 4 fits perfectly
+      // Ensure all text fits with zero cutoff on mobile screens
       if (cols < totalTextCols + 6) {
         dotPitch = width / (totalTextCols + 6);
         cols = Math.floor(width / dotPitch);
       }
 
-      const dotSize = Math.max(3.5, Math.round(dotPitch * 0.72));
-      // Symmetrically center text columns in the middle of the left-to-right matrix
+      // Compute total rows based on dotPitch so full canvas height is populated with LEDs
+      const totalRows = Math.max(13, Math.floor(height / dotPitch));
+      const dotSize = Math.max(3.2, Math.round(dotPitch * 0.72));
+
+      // Symmetrically center text columns and rows in the middle of the left-to-right matrix
       const startCol = Math.max(1, Math.floor((cols - totalTextCols) / 2));
-      const startRow = Math.max(2, Math.floor((rows - 8) / 2));
+      const startRow = Math.max(1, Math.floor((totalRows - 8) / 2));
 
       // Draw all LEDs across the entire screen from left end to right end
-      for (let r = 0; r < rows; r++) {
+      for (let r = 0; r < totalRows; r++) {
         for (let c = 0; c < cols; c++) {
           const x = c * dotPitch + (dotPitch - dotSize) / 2;
           const y = r * dotPitch + (dotPitch - dotSize) / 2;
@@ -354,6 +372,9 @@ export default function GoBelowMatrix() {
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('mousemove', onMouseMove);
       canvas.removeEventListener('mouseleave', onMouseLeave);
+      canvas.removeEventListener('touchstart', onTouchMove);
+      canvas.removeEventListener('touchmove', onTouchMove);
+      canvas.removeEventListener('touchend', onTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

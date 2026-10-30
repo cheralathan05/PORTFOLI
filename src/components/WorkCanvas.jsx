@@ -94,7 +94,8 @@ export default function WorkCanvas() {
     const measure = () => {
       // ponytail: wrap needs (chunk - view) / 2 >= biggest tile; true up to ~1920px wide, edges are masked beyond that.
       // Measure the world box (not the section): on phones it starts below the heading.
-      st.scale = gsap.utils.clamp(0.75, 1.4, world.clientWidth / 1200);
+      const minScale = world.clientWidth < 600 ? 0.55 : 0.75;
+      st.scale = gsap.utils.clamp(minScale, 1.4, world.clientWidth / 1200);
       st.vw = world.clientWidth / st.scale;
       st.vh = world.clientHeight / st.scale;
     };
