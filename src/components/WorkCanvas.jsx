@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { LiquidMetalText } from 'motion-organic/react';
+import LiquidMetalText from './LiquidMetalText';
 import { projects } from '../data/projectsData';
 import { profileData } from '../data/profileData';
 import { MoPortalLink } from '../context/PortalTransitionContext';
@@ -83,7 +83,8 @@ export default function WorkCanvas() {
   const { isDark } = useTheme();
 
   // Per-frame state, kept out of React.
-  const s = useRef({ x: 0, y: 0, vx: DRIFT_X, vy: DRIFT_Y, mx: 0, my: 0, tmx: 0, tmy: 0, scale: 1, vw: 1440, vh: 900, frame: 0 });
+  const s = useRef({ x: 0, y: 0, vx: DRIFT_X, vy: DRIFT_Y, mx: 0, my: 0, tmx: 0, tmy: 0, scale: 1, vw: 1440, vh: 900, worldW: 1440, worldH: 900, frame: 0 });
+  const stageRectRef = useRef(null);
 
   useEffect(() => {
     const st = s.current;
@@ -94,10 +95,15 @@ export default function WorkCanvas() {
     const measure = () => {
       // ponytail: wrap needs (chunk - view) / 2 >= biggest tile; true up to ~1920px wide, edges are masked beyond that.
       // Measure the world box (not the section): on phones it starts below the heading.
-      const minScale = world.clientWidth < 600 ? 0.55 : 0.75;
-      st.scale = gsap.utils.clamp(minScale, 1.4, world.clientWidth / 1200);
-      st.vw = world.clientWidth / st.scale;
-      st.vh = world.clientHeight / st.scale;
+      st.worldW = world.clientWidth || 1440;
+      st.worldH = world.clientHeight || 900;
+      const minScale = st.worldW < 600 ? 0.55 : 0.75;
+      st.scale = gsap.utils.clamp(minScale, 1.4, st.worldW / 1200);
+      st.vw = st.worldW / st.scale;
+      st.vh = st.worldH / st.scale;
+      if (stageRef.current) {
+        stageRectRef.current = stageRef.current.getBoundingClientRect();
+      }
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -124,10 +130,10 @@ export default function WorkCanvas() {
       // Fast flings zoom the world out a touch, like pulling a camera back.
       const speed = Math.hypot(st.vx, st.vy);
       // Scale from the top-left (so world coords [0, vw] x [0, vh] are exactly what's on screen),
-      // and offset the fling zoom so it pulls back around the center.
+      // and offset the fling zoom so it pulls back around the center (using cached dimensions, zero layout thrashing).
       const k = 1 - Math.min(speed * 0.004, 0.05);
-      const ox = (world.clientWidth * (1 - k)) / 2;
-      const oy = (world.clientHeight * (1 - k)) / 2;
+      const ox = (st.worldW * (1 - k)) / 2;
+      const oy = (st.worldH * (1 - k)) / 2;
       worldRef.current.style.transform = `translate(${ox.toFixed(1)}px, ${oy.toFixed(1)}px) scale(${(st.scale * k).toFixed(4)})`;
 
       if (++st.frame % 6 === 0 && hudRef.current) {
@@ -137,11 +143,25 @@ export default function WorkCanvas() {
 
     let running = false;
     const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !running) { gsap.ticker.add(tick); running = true; }
-      else if (!entry.isIntersecting && running) { gsap.ticker.remove(tick); running = false; }
+      if (entry.isIntersecting && !running && !document.hidden) { gsap.ticker.add(tick); running = true; }
+      else if ((!entry.isIntersecting || document.hidden) && running) { gsap.ticker.remove(tick); running = false; }
     });
     io.observe(sectionRef.current);
     tick();
+
+    const handleVisibility = () => {
+      if (document.hidden && running) {
+        gsap.ticker.remove(tick);
+        running = false;
+      } else if (!document.hidden && !running && sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          gsap.ticker.add(tick);
+          running = true;
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
 
     // Page scroll pushes the canvas vertically, so the section reacts to scrolling past it.
     const trigger = reduce ? null : ScrollTrigger.create({
@@ -156,6 +176,7 @@ export default function WorkCanvas() {
     return () => {
       ro.disconnect();
       io.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibility);
       trigger?.kill();
       gsap.ticker.remove(tick);
     };
@@ -185,9 +206,11 @@ export default function WorkCanvas() {
       return;
     }
     if (e.pointerType === 'mouse') {
-      const rect = stageRef.current.getBoundingClientRect();
-      st.tmx = -((e.clientX - rect.left) / rect.width - 0.5) * 120;
-      st.tmy = -((e.clientY - rect.top) / rect.height - 0.5) * 80;
+      const rect = stageRectRef.current || stageRef.current?.getBoundingClientRect();
+      if (rect && rect.width > 0 && rect.height > 0) {
+        st.tmx = -((e.clientX - rect.left) / rect.width - 0.5) * 120;
+        st.tmy = -((e.clientY - rect.top) / rect.height - 0.5) * 80;
+      }
     }
   };
 

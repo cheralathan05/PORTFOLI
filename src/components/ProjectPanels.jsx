@@ -19,7 +19,11 @@ export default function ProjectPanels() {
     return () => io.disconnect();
   }, []);
 
-  const next = () => setActive((i) => (i + 1) % projects.length);
+  const next = () => {
+    if (inView) {
+      setActive((i) => (i + 1) % projects.length);
+    }
+  };
 
   return (
     <section id="more-work" className="panels-section" ref={sectionRef}>
@@ -47,15 +51,15 @@ export default function ProjectPanels() {
                 <img src={p.image} alt={`${p.title} preview`} loading="lazy" draggable="false" />
                 {p.video && (
                   <video
-                    src={p.video}
+                    src={open && inView ? p.video : undefined}
                     poster={p.image}
-                    autoPlay
+                    autoPlay={open && inView}
                     muted
                     loop
                     playsInline
-                    preload={open ? 'auto' : 'none'}
+                    preload={open && inView ? 'metadata' : 'none'}
                     onLoadedData={(e) => {
-                      if (open) {
+                      if (open && inView) {
                         e.currentTarget.defaultMuted = true;
                         e.currentTarget.muted = true;
                         e.currentTarget.play().catch(() => {});
@@ -65,7 +69,7 @@ export default function ProjectPanels() {
                       if (el) {
                         el.defaultMuted = true;
                         el.muted = true;
-                        if (open) {
+                        if (open && inView) {
                           el.play().catch(() => {});
                         } else {
                           el.pause();
@@ -81,7 +85,7 @@ export default function ProjectPanels() {
                   />
                 )}
                 <div className="panel-shade" />
-                {open && (
+                {open && inView && (
                   // The line is the timer: when its 5 s fill finishes, the next project opens.
                   <span className="panel-progress" key={p.id} onAnimationEnd={next} aria-hidden="true" />
                 )}

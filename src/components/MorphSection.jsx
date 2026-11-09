@@ -16,6 +16,7 @@ function LiquidLensText({ text }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handlePointerMove = (e) => {
+    if (e.pointerType === 'touch') return;
     if (!containerRef.current || !bubbleRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;

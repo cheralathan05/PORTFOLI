@@ -16,7 +16,6 @@ const WELCOME_DATA = [
 ];
 
 export default function Preloader({ onComplete }) {
-  const [progress, setProgress] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
@@ -26,6 +25,12 @@ export default function Preloader({ onComplete }) {
   const wordRef = useRef(null);
   const counterObj = useRef({ value: 0 });
   const hasExitedRef = useRef(false);
+
+  // Direct DOM refs to avoid 60 React re-renders & layout reflows per second
+  const fillLeftRef = useRef(null);
+  const fillRightRef = useRef(null);
+  const numberRef = useRef(null);
+  const lastIndexRef = useRef(0);
 
   // Lock body scroll while preloader is active
   useEffect(() => {
@@ -57,23 +62,23 @@ export default function Preloader({ onComplete }) {
     tl.to(contentRef.current, {
       y: -30,
       opacity: 0,
-      duration: 0.5,
+      duration: 0.45,
       ease: 'power2.in'
     })
     // 2. Pull up the preloader curtain with SVG organic curve
     .to(containerRef.current, {
       yPercent: -100,
-      duration: 0.9,
+      duration: 0.85,
       ease: 'power4.inOut'
-    }, '-=0.2');
+    }, '-=0.15');
 
     // Morph the SVG bottom curve if available
     if (curvePathRef.current) {
       tl.to(curvePathRef.current, {
         attr: { d: "M0 0 L100 0 L100 100 Q50 0 0 100 Z" },
-        duration: 0.7,
+        duration: 0.65,
         ease: 'power3.in'
-      }, '-=0.85');
+      }, '-=0.8');
     }
   };
 
@@ -81,8 +86,10 @@ export default function Preloader({ onComplete }) {
   const handleSkip = () => {
     if (hasExitedRef.current) return;
     counterObj.current.value = 100;
-    setProgress(100);
     setCurrentIndex(WELCOME_DATA.length - 1);
+    if (fillLeftRef.current) fillLeftRef.current.style.transform = 'scaleX(1)';
+    if (fillRightRef.current) fillRightRef.current.style.transform = 'scaleX(1)';
+    if (numberRef.current) numberRef.current.textContent = '100';
     triggerExit();
   };
 
@@ -96,31 +103,40 @@ export default function Preloader({ onComplete }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Main counter & language cycling animation
+  // Main counter & language cycling animation with ZERO layout reflows
   useEffect(() => {
-    const totalDuration = 2.8; // 2.8 seconds total duration
+    const totalDuration = 2.4; // Crisper 2.4s total duration for immediate responsiveness
 
-    // Animate counter from 0 to 100
     const tween = gsap.to(counterObj.current, {
       value: 100,
       duration: totalDuration,
       ease: 'power2.inOut',
       onUpdate: () => {
         const val = Math.round(counterObj.current.value);
-        setProgress(val);
+        const scale = val / 100;
 
-        // Map 0-100 to the 10 languages
-        // 0-9 -> 0, 10-19 -> 1, ..., 90-100 -> 9
+        // GPU-accelerated scaleX directly on DOM nodes
+        if (fillLeftRef.current) fillLeftRef.current.style.transform = `scaleX(${scale})`;
+        if (fillRightRef.current) fillRightRef.current.style.transform = `scaleX(${scale})`;
+        if (numberRef.current) {
+          numberRef.current.textContent = val < 10 ? `0${val}` : String(val);
+        }
+
+        // Only trigger React state change when language actually changes (10 times total, NOT 180 times!)
         const newIdx = Math.min(
           Math.floor((val / 100) * WELCOME_DATA.length),
           WELCOME_DATA.length - 1
         );
-        setCurrentIndex(newIdx);
+        if (newIdx !== lastIndexRef.current) {
+          lastIndexRef.current = newIdx;
+          setCurrentIndex(newIdx);
+        }
       },
       onComplete: () => {
-        setProgress(100);
-        // Small pause at 100 before pulling up the curtain
-        gsap.delayedCall(0.25, triggerExit);
+        if (fillLeftRef.current) fillLeftRef.current.style.transform = 'scaleX(1)';
+        if (fillRightRef.current) fillRightRef.current.style.transform = 'scaleX(1)';
+        if (numberRef.current) numberRef.current.textContent = '100';
+        gsap.delayedCall(0.15, triggerExit);
       }
     });
 
@@ -129,13 +145,13 @@ export default function Preloader({ onComplete }) {
     };
   }, []);
 
-  // Animate word changes
+  // Animate word changes smoothly with GPU opacity & translation
   useEffect(() => {
     if (wordRef.current) {
       gsap.fromTo(
         wordRef.current,
-        { y: 15, opacity: 0, filter: 'blur(4px)' },
-        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.28, ease: 'power2.out' }
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.24, ease: 'power2.out' }
       );
     }
   }, [currentIndex]);
@@ -176,23 +192,23 @@ export default function Preloader({ onComplete }) {
           </h1>
         </div>
 
-        {/* Counter with Horizontal Dividing Line (Exact Reference Match) */}
+        {/* Counter with Horizontal Dividing Line (Exact Reference Match, Zero Reflow) */}
         <div className="preloader-line-track">
           <div className="preloader-line preloader-line-left">
             <div
+              ref={fillLeftRef}
               className="preloader-line-fill left"
-              style={{ width: `${progress}%` }}
             />
           </div>
 
-          <div className="preloader-number" aria-live="polite">
-            {progress < 10 ? `0${progress}` : progress}
+          <div ref={numberRef} className="preloader-number" aria-live="polite">
+            00
           </div>
 
           <div className="preloader-line preloader-line-right">
             <div
+              ref={fillRightRef}
               className="preloader-line-fill right"
-              style={{ width: `${progress}%` }}
             />
           </div>
         </div>

@@ -3,7 +3,6 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { profileData } from '../data/profileData';
-import { VariablePhysicsText } from 'motion-organic/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -91,9 +90,9 @@ export default function Hero() {
       </div>
       <div className="hero-meta">
         <span>{profileData.location}</span>
-        <VariablePhysicsText color="var(--muted)" minWeight={300} maxWeight={700} continuousWave={true}>
+        <span className="scroll-explore-pill mono">
           SCROLL TO EXPLORE [↓]
-        </VariablePhysicsText>
+        </span>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
           <span className="status-dot-active" />
           {profileData.status}

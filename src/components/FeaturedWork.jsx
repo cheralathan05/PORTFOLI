@@ -1,8 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { LiquidMetalText } from 'motion-organic/react';
+import LiquidMetalText from './LiquidMetalText';
 import { projects } from '../data/projectsData';
 import { MoPortalLink } from '../context/PortalTransitionContext';
 import { useTheme, LIQUID_METAL_PALETTE } from '../context/ThemeContext';
@@ -11,46 +11,54 @@ gsap.registerPlugin(ScrollTrigger);
 
 const featured = projects.filter((p) => p.featured);
 
-function FeaturedVideo({ src, poster, objectPosition, title }) {
+function FeaturedVideo({ src, poster, objectPosition, title, isActive }) {
   const videoRef = useRef(null);
+  const containerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Strict muted setting to bypass browser autoplay policies
-    video.defaultMuted = true;
-    video.muted = true;
-
-    // Use IntersectionObserver to start playback when visible and pause when off-screen
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.defaultMuted = true;
-          video.muted = true;
-          video
-            .play()
+    if (isActive) {
+      const isMobile = window.innerWidth <= 768 || window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      // On mobile screens, do not autoplay 400MB videos automatically to prevent memory freezing
+      if (!isMobile) {
+        setShouldLoad(true);
+        video.defaultMuted = true;
+        video.muted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise
             .then(() => setIsPlaying(true))
-            .catch(() => {
-              // Retry on user interaction
-            });
-        } else {
-          video.pause();
-          setIsPlaying(false);
+            .catch(() => {});
         }
-      },
-      { threshold: 0.15 }
-    );
+      }
+    } else {
+      // Whenever inactive, pause immediately to free up GPU decoder pipeline!
+      if (!video.paused) {
+        video.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, [isActive]);
 
-    observer.observe(video);
-
-    return () => {
-      observer.disconnect();
+  // Pause playback when tab is hidden to save GPU cycles and battery
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      const video = videoRef.current;
+      if (!video) return;
+      if (document.hidden && !video.paused) {
+        video.pause();
+        setIsPlaying(false);
+      }
     };
-  }, [src]);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
 
-  const togglePlay = (e) => {
+  const togglePlay = useCallback((e) => {
     e.stopPropagation();
     const video = videoRef.current;
     if (!video) return;
@@ -59,6 +67,10 @@ function FeaturedVideo({ src, poster, objectPosition, title }) {
     video.muted = true;
 
     if (video.paused) {
+      setShouldLoad(true);
+      if (!video.src && src) {
+        video.src = src;
+      }
       video
         .play()
         .then(() => setIsPlaying(true))
@@ -67,10 +79,11 @@ function FeaturedVideo({ src, poster, objectPosition, title }) {
       video.pause();
       setIsPlaying(false);
     }
-  };
+  }, [src]);
 
   return (
     <div
+      ref={containerRef}
       className="feature-video-wrapper"
       onClick={togglePlay}
       style={{ cursor: 'pointer', width: '100%', height: '100%', position: 'relative' }}
@@ -78,13 +91,12 @@ function FeaturedVideo({ src, poster, objectPosition, title }) {
     >
       <video
         ref={videoRef}
-        src={src}
+        src={shouldLoad ? src : undefined}
         poster={poster}
-        autoPlay
         muted
         loop
         playsInline
-        preload="auto"
+        preload={shouldLoad ? 'metadata' : 'none'}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onLoadedData={(e) => {
@@ -121,37 +133,87 @@ function FeaturedVideo({ src, poster, objectPosition, title }) {
 export default function FeaturedWork() {
   const containerRef = useRef(null);
   const { isDark } = useTheme();
+  const [activeCardIndex, setActiveCardIndex] = useState(-1);
 
   useGSAP(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const cards = gsap.utils.toArray('.feature-card');
+    const mm = gsap.matchMedia();
 
-    cards.forEach((card, i) => {
-      // Media drifts a little inside its frame while the card is on screen.
-      const mediaEl = card.querySelector('.feature-media img, .feature-media video');
-      if (mediaEl) {
-        gsap.fromTo(mediaEl, { yPercent: -6 }, {
-          yPercent: 6,
-          ease: 'none',
-          scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true },
-        });
-      }
-
-      if (i === cards.length - 1) return;
-      // Sticky stack: pin each card, then shrink and dim it while the next one slides over.
-      ScrollTrigger.create({
-        trigger: card,
-        start: 'top top',
-        endTrigger: cards[cards.length - 1],
-        end: 'top top',
-        pin: true,
-        pinSpacing: false,
-      });
-      const recede = { trigger: cards[i + 1], start: 'top bottom', end: 'top top', scrub: true };
-      gsap.to(card.querySelector('.feature-inner'), { scale: 0.9, ease: 'none', scrollTrigger: recede });
-      // Fade a solid shade over the card (not the card itself) so cards never show through each other.
-      gsap.to(card.querySelector('.feature-shade'), { opacity: 0.7, ease: 'none', scrollTrigger: recede });
+    // Global watcher to pause all videos when outside featured section
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: 'top bottom',
+      end: 'bottom top',
+      onLeave: () => setActiveCardIndex(-1),
+      onLeaveBack: () => setActiveCardIndex(-1),
     });
+
+    // Desktop: full stacked cards with media parallax
+    mm.add('(min-width: 769px)', () => {
+      cards.forEach((card, i) => {
+        const mediaEl = card.querySelector('.feature-media img, .feature-media video');
+        if (mediaEl) {
+          gsap.fromTo(mediaEl, { yPercent: -6 }, {
+            yPercent: 6,
+            ease: 'none',
+            scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true },
+          });
+        }
+
+        // Active card tracker so only 1 video plays at any time
+        ScrollTrigger.create({
+          trigger: card,
+          start: i === 0 ? 'top 60%' : 'top top+=20',
+          endTrigger: i === cards.length - 1 ? containerRef.current : cards[i + 1],
+          end: i === cards.length - 1 ? 'bottom top' : 'top top+=20',
+          onEnter: () => setActiveCardIndex(i),
+          onEnterBack: () => setActiveCardIndex(i),
+        });
+
+        if (i === cards.length - 1) return;
+        ScrollTrigger.create({
+          trigger: card,
+          start: 'top top',
+          endTrigger: cards[cards.length - 1],
+          end: 'top top',
+          pin: true,
+          pinSpacing: false,
+        });
+        const recede = { trigger: cards[i + 1], start: 'top bottom', end: 'top top', scrub: true };
+        gsap.to(card.querySelector('.feature-inner'), { scale: 0.9, ease: 'none', scrollTrigger: recede });
+        gsap.to(card.querySelector('.feature-shade'), { opacity: 0.7, ease: 'none', scrollTrigger: recede });
+      });
+    });
+
+    // Mobile: smooth sticky card stack without layout thrashing
+    mm.add('(max-width: 768px)', () => {
+      cards.forEach((card, i) => {
+        // Active card tracker
+        ScrollTrigger.create({
+          trigger: card,
+          start: i === 0 ? 'top 60%' : 'top top+=20',
+          endTrigger: i === cards.length - 1 ? containerRef.current : cards[i + 1],
+          end: i === cards.length - 1 ? 'bottom top' : 'top top+=20',
+          onEnter: () => setActiveCardIndex(i),
+          onEnterBack: () => setActiveCardIndex(i),
+        });
+
+        if (i === cards.length - 1) return;
+        ScrollTrigger.create({
+          trigger: card,
+          start: 'top top',
+          endTrigger: cards[cards.length - 1],
+          end: 'top top',
+          pin: true,
+          pinSpacing: false,
+        });
+        const recede = { trigger: cards[i + 1], start: 'top bottom', end: 'top top', scrub: 0.3 };
+        gsap.to(card.querySelector('.feature-shade'), { opacity: 0.65, ease: 'none', scrollTrigger: recede });
+      });
+    });
+
+    return () => mm.revert();
   }, { scope: containerRef });
 
   return (
@@ -208,7 +270,7 @@ export default function FeaturedWork() {
         </div>
       </div>
 
-      {featured.map((p) => (
+      {featured.map((p, i) => (
         <article className="feature-card" key={p.id} style={{ '--card-accent': p.accent }}>
           <div className="feature-inner">
             <div className="feature-copy">
@@ -291,6 +353,7 @@ export default function FeaturedWork() {
                   poster={p.image}
                   objectPosition={p.imagePosition}
                   title={p.title}
+                  isActive={activeCardIndex === i}
                 />
               ) : (
                 <img src={p.image} alt={`${p.title} preview`} loading="lazy" style={p.imagePosition ? { objectPosition: p.imagePosition } : undefined} />

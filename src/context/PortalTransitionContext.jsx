@@ -95,19 +95,8 @@ export function PortalTransitionProvider({ children }) {
 
   useEffect(() => {
     springRef.current = new Spring({ stiffness: 110, damping: 20 });
-
-    // Interactive liquid sheen specular reflection tracking mouse coordinates
-    const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      document.documentElement.style.setProperty('--sheen-x', `${x.toFixed(1)}%`);
-      document.documentElement.style.setProperty('--sheen-y', `${y.toFixed(1)}%`);
-    };
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-
     return () => {
       springRef.current = null;
-      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
